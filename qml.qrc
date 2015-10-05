@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MangaView.qml</file>
+        <file>ChapterView.qml</file>
+        <file>PageView.qml</file>
+    </qresource>
+</RCC>
