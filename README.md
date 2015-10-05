@@ -1,0 +1,2 @@
+# zornreader
+qml mangareader
