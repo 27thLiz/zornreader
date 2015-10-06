@@ -16,6 +16,7 @@
  */
 import QtQuick 2.5
 import Material 0.1
+import Material.ListItems 0.1 as ListItem
 import QtQuick.Controls 1.4 as Controls
 
 Tab {
@@ -74,6 +75,7 @@ Tab {
                 to: "200"
             }
 
+
             ListView {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -82,30 +84,28 @@ Tab {
                 id: listview
                 model: model
 
+                Scrollbar {
+                    flickableItem: parent
+                    thickness: Units.dp(10)
+                }
 
-                delegate: Text {
-                    color: "black"
+                delegate: ListItem.Standard {
+
                     text: name
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onContainsMouseChanged: {
-                            color = containsMouse ? theme.accentColor : "black"
-                        }
-                        onClicked:  {
-
-                            clickedManga(i, name)
-                        }
-                    }
+                    onClicked: clickedManga(i, name)
                 }
             }
+        }
+
+        function addManga(chapter_id, manga_name) {
+            var component = Qt.createComponent(Qt.resolvedUrl("src/qml/MangaItem.qml"));
+            var newManga = component.createObject(mangalist, {chapter_id: chapter_id, manga_name: manga_name})
         }
 
         function searchMangas(search_str) {
 
             listview.model.clear()
-
+            listview.contentY = 0
             for (var i = 0; i < mangas.length; i++) {
 
                 if (mangas[i].name.toLowerCase().indexOf(search_str.toLowerCase()) != -1) {
@@ -128,6 +128,7 @@ Tab {
 
                         listview.model.append({name: obj.manga[i].t, i: obj.manga[i].i })
                         mangas.push({name: obj.manga[i].t, i: obj.manga[i].i })
+                        //addManga(obj.manga[i].i, obj.manga[i].t)
                     }
                 }
             }

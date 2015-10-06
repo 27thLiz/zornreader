@@ -1,8 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>MangaView.qml</file>
-        <file>ChapterView.qml</file>
-        <file>PageView.qml</file>
+        <file>src/qml/globals.js</file>
+        <file>src/qml/ChapterView.qml</file>
+        <file>src/qml/main.qml</file>
+        <file>src/qml/MangaView.qml</file>
+        <file>src/qml/PageView.qml</file>
     </qresource>
 </RCC>

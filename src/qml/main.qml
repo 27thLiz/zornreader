@@ -25,7 +25,9 @@ ApplicationWindow {
 
     title: "Zorn Reader"
     property bool isFullScreen: false
-
+    property var chapters: []
+    //property var
+    property Item chapView: ;
     function toggleFullScreen(force, fs ) {
         force = typeof force !== 'undefined' ? force : false;
         fs = typeof fs       !== 'undefined' ? fs : false;
@@ -49,12 +51,15 @@ ApplicationWindow {
         }
     }
 
+
     theme {
-        backgroundColor: Palette.colors["blueGrey"]["800"]
-        primaryColor: Palette.colors["blue"]["500"]
-        primaryDarkColor: Palette.colors["orange"]["700"]
-        accentColor: Palette.colors["yellow"]["500"]
-        tabHighlightColor: "white"
+        backgroundColor: "#C5CAE9"
+
+        primaryColor: "#3F51B5"
+        primaryDarkColor: "#303F9F"
+
+        accentColor: "#FF4081"
+        tabHighlightColor: "#FF4081"
     }
 
     color: theme.backgroundColor
@@ -65,10 +70,10 @@ ApplicationWindow {
 
         id: mainPage
         Keys.onEscapePressed: toggleFullScreen()
-        function open_chapter(chapID) {
+        function open_chapter(chapID, index) {
 
             toggleFullScreen(true, true)
-            pageStack.push(Qt.resolvedUrl("PageView.qml"), {chapter: chapID})
+            pageStack.push(Qt.resolvedUrl("PageView.qml"), {chapter: chapID, currentChapter: index})
         }
 
         MangaView {
@@ -76,14 +81,15 @@ ApplicationWindow {
             id: mview
             visible: true
             onClickedManga:{
-                var newPage = pageStack.push(Qt.resolvedUrl("ChapterView.qml"), {manga_id: iD, manga_name: name})
-                newPage.clickedChapter.connect(mainPage.open_chapter)
+                chapView = pageStack.push(Qt.resolvedUrl("ChapterView.qml"), {manga_id: iD, manga_name: name})
+                chapView.clickedChapter.connect(mainPage.open_chapter)
             }
         }
 
         Tab {
-            iconName: "action/favorite"
+
             id: p
+            iconName:  "action/favorite"
             PageView {
                 id: pview
                 anchors.fill: parent

@@ -19,14 +19,28 @@ import Material 0.1
 import QtQuick.Controls 1.4 as Controls
 
 Page {
+
     id: pview
     title: "read"
     visible: true
     backgroundColor: "black"
     property var pages: []
+    property int currentChapter
     property string chapter
 
     actions: [
+
+        Action {
+            iconName: "navigation/chevron_left"
+            name: "Previous chapter"
+            onTriggered: chapterAction("prev")
+        },
+
+        Action {
+            iconName: "navigation/chevron_right"
+            name: "Next chapter"
+            onTriggered: chapterAction("next")
+        },
 
         Action {
             iconName: isFullScreen ? "navigation/fullscreen_exit" : "navigation/fullscreen"
@@ -118,10 +132,25 @@ Page {
         }
     }
 
-    onChapterChanged: getPages(chapter)
+    //onChapterChanged: getPages(chapter)
+    onCurrentChapterChanged: getPages(win.chapters[currentChapter].chapter_id)
+
+    function chapterAction(action) {
+        var newChapter = currentChapter
+        if (action === "next") {
+            newChapter -= 1
+        }
+        else if (action === "prev") {
+            newChapter += 1
+        }
+        if (newChapter >= 0 && newChapter < win.chapters.length) {
+            currentChapter = newChapter
+        }
+    }
+
     function getPages(chapter_id) {
 
-        pview.actionBar.hidden = true
+        pages.length = 0
         var xmlhttp = new XMLHttpRequest();
         var url = "https://www.mangaeden.com/api/chapter/" + chapter_id + "/";
         xmlhttp.open("GET", url, true);

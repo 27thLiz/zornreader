@@ -3,8 +3,7 @@ TEMPLATE = app
 QT += qml quick
 CONFIG += c++11
 
-SOURCES += main.cpp \# main.qml
-    fileio.cpp
+SOURCES += src/c++/main.cpp \
 
 RESOURCES += qml.qrc
 
@@ -15,8 +14,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    fileio.h
 
-DISTFILES += \
-    ChapterView.qml
+
 

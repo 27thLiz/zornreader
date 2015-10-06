@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     fileIO io;
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("fileio", &io);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/src/qml/main.qml")));
 
     return app.exec();
 }

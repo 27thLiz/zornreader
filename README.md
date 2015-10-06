@@ -1,2 +1,3 @@
 # zornreader
-qml mangareader
+
+qml mangareader for mangaeden.com, needs qml-material
