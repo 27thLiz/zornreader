@@ -18,6 +18,7 @@ import QtQuick 2.5
 import QtQuick.Window 2.2
 import Material 0.1
 import QtQuick.Controls 1.4 as Controls
+import "globals.js" as Globals
 
 ApplicationWindow {
     id: win
@@ -26,31 +27,7 @@ ApplicationWindow {
     title: "Zorn Reader"
     property bool isFullScreen: false
     property var chapters: []
-    //property var
-    property Item chapView: ;
-    function toggleFullScreen(force, fs ) {
-        force = typeof force !== 'undefined' ? force : false;
-        fs = typeof fs       !== 'undefined' ? fs : false;
-        if (force) {
-            if (fs) {
-                isFullScreen = true
-                showFullScreen()
-            }
-            else {
-                isFullScreen = false
-                showMaximized()
-            }
-        }
-        else if (isFullScreen) {
-            isFullScreen = false
-            showMaximized()
-        }
-        else {
-            isFullScreen = true
-            showFullScreen()
-        }
-    }
-
+    property Item chapView
 
     theme {
         backgroundColor: "#C5CAE9"
@@ -69,10 +46,10 @@ ApplicationWindow {
         title: "Mangas"
 
         id: mainPage
-        Keys.onEscapePressed: toggleFullScreen()
+        Keys.onEscapePressed: Globals.toggleFullScreen()
         function open_chapter(chapID, index) {
 
-            toggleFullScreen(true, true)
+            Globals.toggleFullScreen(true, true)
             pageStack.push(Qt.resolvedUrl("PageView.qml"), {chapter: chapID, currentChapter: index})
         }
 
@@ -84,16 +61,18 @@ ApplicationWindow {
                 chapView = pageStack.push(Qt.resolvedUrl("ChapterView.qml"), {manga_id: iD, manga_name: name})
                 chapView.clickedChapter.connect(mainPage.open_chapter)
             }
+
         }
 
-        Tab {
+        MangaView {
 
             id: p
             iconName:  "action/favorite"
-            PageView {
-                id: pview
-                anchors.fill: parent
-                visible: false
+            title: ""
+            isFav: true
+            onClickedManga:{
+                chapView = pageStack.push(Qt.resolvedUrl("ChapterView.qml"), {manga_id: iD, manga_name: name})
+                chapView.clickedChapter.connect(mainPage.open_chapter)
             }
         }
     }

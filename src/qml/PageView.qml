@@ -17,6 +17,7 @@
 import QtQuick 2.5
 import Material 0.1
 import QtQuick.Controls 1.4 as Controls
+import "globals.js" as Globals
 
 Page {
 
@@ -46,7 +47,7 @@ Page {
             iconName: isFullScreen ? "navigation/fullscreen_exit" : "navigation/fullscreen"
             name: "toggle fullscreen"
             onTriggered: {
-                toggleFullScreen()
+                Globals.toggleFullScreen()
             }
         },
 
@@ -63,6 +64,7 @@ Page {
         height: Units.dp(32)
         hoverEnabled: true
         property bool hiding: true
+
         onContainsMouseChanged: {
             if (containsMouse && hiding) {
                 hiding = false
@@ -102,9 +104,12 @@ Page {
 
                 scroll.flickableItem.contentY = 0
                 var go = pages.length - 1 - page
-                if (go >= 0) {
+                if (go >= 0) { 
                     source = download + pages[go]
                     currentPage = page
+                }
+                else {
+                    chapterAction("next")
                 }
             }
 
@@ -131,8 +136,7 @@ Page {
             }
         }
     }
-
-    //onChapterChanged: getPages(chapter)
+    Component.onCompleted: actionBar.hidden = true
     onCurrentChapterChanged: getPages(win.chapters[currentChapter].chapter_id)
 
     function chapterAction(action) {

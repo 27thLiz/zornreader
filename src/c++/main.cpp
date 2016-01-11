@@ -1,15 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "fileio.h"
+#include <QSettings>
+
+#include "zornreader.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
-    fileIO io;
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("fileio", &io);
+    ZornReader zorn;
+    engine.rootContext()->setContextProperty("zorn", &zorn);
     engine.load(QUrl(QStringLiteral("qrc:/src/qml/main.qml")));
 
     return app.exec();

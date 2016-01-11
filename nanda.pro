@@ -4,6 +4,7 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += src/c++/main.cpp \
+    src/c++/zornreader.cpp
 
 RESOURCES += qml.qrc
 
@@ -14,6 +15,7 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
+    src/c++/zornreader.h
 
 
 

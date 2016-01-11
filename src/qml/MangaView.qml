@@ -23,11 +23,11 @@ Tab {
 
     id: mview
     title: "ALL"
-    SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
 
     signal clickedManga(string iD, string name)
-
+    property bool isFav: false
     Item {
+        id: it
         property var mangas: []
         property string test
         View {
@@ -97,10 +97,10 @@ Tab {
             }
         }
 
-        function addManga(chapter_id, manga_name) {
-            var component = Qt.createComponent(Qt.resolvedUrl("src/qml/MangaItem.qml"));
-            var newManga = component.createObject(mangalist, {chapter_id: chapter_id, manga_name: manga_name})
-        }
+//        function addManga(chapter_id, manga_name) {
+//            var component = Qt.createComponent(Qt.resolvedUrl("src/qml/MangaItem.qml"));
+//            var newManga = component.createObject(mangalist, {chapter_id: chapter_id, manga_name: manga_name})
+//        }
 
         function searchMangas(search_str) {
 
@@ -117,23 +117,42 @@ Tab {
         function getMangas() {
 
             listview.model.clear()
-            var xmlhttp = new XMLHttpRequest();
-            var url = "https://www.mangaeden.com/api/list/0/";
-            xmlhttp.open("GET", url, true);
-            xmlhttp.onreadystatechange=function() {
-                if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+            if (isFav) {
+                getFromFavs()
+            }
+            else {
 
-                    var obj = JSON.parse(xmlhttp.responseText)
-                    for (var i = 0; i < obj.manga.length; i++) {
+                var xmlhttp = new XMLHttpRequest();
+                var url = "https://www.mangaeden.com/api/list/0/";
+                xmlhttp.open("GET", url, true);
+                xmlhttp.onreadystatechange=function() {
+                    if (xmlhttp.readyState == XMLHttpRequest.DONE) {
 
-                        listview.model.append({name: obj.manga[i].t, i: obj.manga[i].i })
-                        mangas.push({name: obj.manga[i].t, i: obj.manga[i].i })
-                        //addManga(obj.manga[i].i, obj.manga[i].t)
+                        var obj = JSON.parse(xmlhttp.responseText)
+                        for (var i = 0; i < obj.manga.length; i++) {
+
+                            listview.model.append({name: obj.manga[i].t, i: obj.manga[i].i })
+                            mangas.push({name: obj.manga[i].t, i: obj.manga[i].i })
+                            //addManga(obj.manga[i].i, obj.manga[i].t)
+                        }
                     }
                 }
+                xmlhttp.send();
             }
-            xmlhttp.send();
         }
+
+        function getFromFavs() {
+            listview.model.clear()
+            var favs = zorn.load_favs()
+            //console.log("Favorites: ")
+            for (var prop in favs) {
+                //console.log(prop + " " + favs[prop])
+                var ob = {name: prop, i: favs[prop]}
+                listview.model.append(ob)
+                mangas.push(ob)
+            }
+        }
+
         Component.onCompleted: getMangas()
     }
 }

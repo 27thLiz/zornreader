@@ -30,6 +30,17 @@ Page {
     property string manga_id
     property string manga_name
 
+    actions: [
+
+        Action {
+            iconName: "action/favorite"
+            name: "Add to favorites"
+            onTriggered: {
+                zorn.save_fav(manga_name, manga_id)
+            }
+        }
+
+    ]
     View {
 
         anchors.fill: parent
@@ -48,6 +59,11 @@ Page {
             id: listview
             model: model
 
+            Scrollbar {
+                flickableItem: listview
+                thickness: Units.dp(10)
+            }
+
             delegate: ListItem.Standard {
 
                 text: num + ": " + name
@@ -57,7 +73,7 @@ Page {
 
         onVisibleChanged: {
             if (visible) {
-                toggleFullScreen(true, false)
+                Globals.toggleFullScreen(true, false)
             }
         }
     }
